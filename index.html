@@ -131,6 +131,12 @@
             fbPagesList.appendChild(spanWrapper);
         }
 
+        function removeFbPage() {
+            while (fbPagesList.hasChildNodes()) {  
+                fbPagesList.removeChild(fbPagesList.firstChild);
+            }
+        }
+
         function appendIgPage(pageid) {
             let spanWrapper = document.createElement("div");
             let spanElement = document.createElement("span");
@@ -140,6 +146,12 @@
             spanElement.innerHTML = pageid;
             spanWrapper.appendChild(spanElement)
             igPagesList.appendChild(spanWrapper);
+        }
+
+        function removeIgPage() {
+            while (igPagesList.hasChildNodes()) {  
+                igPagesList.removeChild(igPagesList.firstChild);
+            }
         }
 
         function getFbAccountInfo() {
@@ -210,6 +222,8 @@
                 console.log("Logged out.");
                 fb_logout_button.setAttribute("disabled","true");
                 fb_login_button.removeAttribute("disabled");
+                removeFbPage();
+                removeIgPage();
                 if (type == "internal") {
                     displayLoginMessage("Logged out successfully.", "append");
                 } else {
