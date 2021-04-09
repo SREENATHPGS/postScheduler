@@ -1,0 +1,247 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel='shortcut icon' type='image/x-icon' href='./favicon.ico' />
+    <style>
+        @font-face {
+            font-family: 'fira_sansregular';
+            src: url("./assets/fonts/webfont_firasans_Regular/firasans-regular-webfont.woff2") format('woff2'),
+                 url("./assets/fonts/webfont_firasans_Regular/firasans-regular-webfont.woff") format('woff');
+            font-weight: normal;
+        font-style: normal;
+        }
+    </style>
+    <link rel="stylesheet" href="./assets/css/form_style.css">
+    <title>Document</title>
+</head>
+<body>
+
+    <div class="contact_us_main_container">
+        <div class="custom_container">
+            <div id = "logoWrapper">
+                <img src="./assets/images/logo250.png" alt="Thunder Share" style="height:200px; display: block; margin-left: auto; margin-right: auto;">
+            </div>
+            <div style="text-align: center;">
+                <h3>Instagram Post Scheduler</h3>
+            </div>
+        </div>
+        <div class="custom_container">
+        <p id="login_message"></p>
+        <div class="row">
+            <div style="display: flex; flex-direction: row;">
+                <div class = "row" style="width: 50%;" id = "fbPagesList"></div>
+                <div class = "row" style="width: 50%;" id = "igPagesList"></div>
+            </div>
+        </div>
+        <form id="contactUsForm">
+            <div class="row">
+              <div class="col-25">
+                <label for="image_url">Image URL</label>
+              </div>
+              <div class="col-75">
+                <input class="loginInput" type="text" id="image_url" name="image_url" placeholder="Enter image url to be posted." required>
+              </div>
+            </div>
+            <div class="row">
+              <div class="col-25">
+                <label for="schedule_date">Schedule Date</label>
+              </div>
+              <div class="col-75">
+                <input class="loginInput" type="text" id="schedule_date" name="schedule_date" placeholder="dd-mm-yyyy:hh:mm:ss" required>
+              </div>
+            </div>
+        
+            <!-- <div class="row">
+              <div class="col-25">
+                <label for="scope">What is your enquiry about?.</label>
+              </div>
+              <div class="col-75">
+                <datalist id="scopeDataList" class="loginInput" name="scope">
+                <option value="Website">Personal, Corporate, Team, Club websites.</option>
+                <option value="Hosting">Hosting - Bulk, R&D, Demo</option>
+                <option value="Web-App">Web Application Development</option>
+                <option value="Android-App">Android Application Developtment</option>
+                <option value="Hybrid-App">Hybrid Application [Ionic] Development</option>
+                <option value="DevOps">DevOps Workflow Design/Implementation</option>
+                <option value="Consultation">Consultation</option>
+                <option value="Collaboration">Let's work togather</option>
+                <option value="Build Feature">Want to build a feature for your application? (Eg. REST API development)</option>
+                </datalist>
+            <input class="loginInput" type="text" autoComplete="on" list="scopeDataList" id="scope" name="scope">
+              </div>
+            </div> -->
+        
+            <div class="row">
+                <input class="loginInput" type="button" onClick=place_schedule() id="submitButton" value="Schedule">
+            </div>
+            
+            <div class="row fb_bg   ">
+                <input class="loginInput" type="button" onClick=fblogin() id="fb_login_button" value="FB Login">
+                <input class="loginInput" type="button" onClick=fblogout() id="fb_logout_button" value="FB Logout">
+            </div>
+          </form>
+        </div>
+        </div>
+
+        <script src="./assets/js/api_calls.js"></script>
+    <script>
+        var fb_login_button = undefined; 
+        var fb_logout_button = undefined;
+        var login_message = undefined;
+        var fbPagesList = undefined;
+        var igPagesList = undefined;
+        var selectedInstagramAccount = undefined;
+        var apiCall = new ApiCalls("/");
+        var requiredPermissions = ['public_profile', 'instagram_basic', 'pages_show_list', 'instagram_content_publish'];
+
+        window.fbAsyncInit = function() {
+            FB.init({
+                appId            : '443629286741622',
+                autoLogAppEvents : true,
+                xfbml            : true,
+                version          : 'v10.0'
+            });
+            
+            FB.getLoginStatus(function(response) {
+                // console.log(response);
+                if (response.status == "connected") {
+                    displayLoginMessage("Logged in");
+                    fb_login_button.setAttribute("disabled","true");
+                    fb_logout_button.removeAttribute("disabled");
+                    getFbAccountInfo();
+                } else {
+                    displayLoginMessage("Not logged in to any facebook accounts.")
+                    fb_logout_button.setAttribute("disabled","true");
+                    fb_login_button.removeAttribute("disabled");
+                }
+            });
+        };
+
+        function appendFbPage(page) {
+            let spanWrapper = document.createElement("div");
+            let spanElement = document.createElement("span");
+            spanWrapper.style.width = "100%";
+            spanWrapper.style.padding = "1%";
+            spanWrapper.style.backgroundImage = "linear-gradient(to left, white , #4f79af)";
+            spanElement.innerHTML = page.name;
+            spanWrapper.appendChild(spanElement)
+            fbPagesList.appendChild(spanWrapper);
+        }
+
+        function appendIgPage(pageid) {
+            let spanWrapper = document.createElement("div");
+            let spanElement = document.createElement("span");
+            spanWrapper.style.width = "100%";
+            spanWrapper.style.padding = "1%";
+            spanWrapper.style.backgroundImage = "linear-gradient(to right, white , #a545cc)";
+            spanElement.innerHTML = pageid;
+            spanWrapper.appendChild(spanElement)
+            igPagesList.appendChild(spanWrapper);
+        }
+
+        function getFbAccountInfo() {
+            displayLoginMessage('Fetching FB account information.... ');
+            FB.api('/me', function(response) {
+                console.log(response);
+                displayLoginMessage('Logged in on FB as ' + response.name);
+                FB.api('/me/accounts', function(response) {
+                    console.log(response);
+                    let fbPages = response.data;
+                    fbPages.forEach(page => {
+                        let fbPageId = page.id;
+                        FB.api('/'+page.id+"?fields=instagram_business_account&access_token="+FB.getAccessToken(), function(response){
+                            console.log(response);
+                            if (response.hasOwnProperty("instagram_business_account")) {
+                                appendFbPage(page);
+                                appendIgPage(response.instagram_business_account.id);
+                            }
+                        });
+                    });
+                });
+            });
+
+            FB.api("/"+FB.getUserID()+"/permissions?access_token="+FB.getAccessToken(), function(response) {
+                let permissionData = response.data;
+                let not_granted_list = [];
+                console.log(response);
+
+                permissionData.forEach(permission => {
+                    if (permission.status == "declined") {
+                        not_granted_list.push(permission.permission);
+                    }
+                });
+                
+
+                if (not_granted_list.length > 0) {
+                    displayLoginMessage("Required permission(s) not granted "+not_granted_list.join(",")+". Please login again and grant permissions.");
+                    fblogout();
+                }
+            });
+        }
+  
+        function displayLoginMessage(message, type="replace") {
+            if (type == "append") {
+                message = login_message.innerHTML +" "+message;
+            }
+            login_message.innerHTML = "";
+            login_message.innerHTML = message;
+        }
+
+        function fblogin() {
+            FB.login(function(response) {
+                        if (response.status === 'connected') {
+                            console.log("Logged into your webpage and Facebook.");
+                            fb_login_button.setAttribute("disabled","true");
+                            fb_logout_button.removeAttribute("disabled");
+                            getFbAccountInfo();
+                        } else {
+                            displayLoginMessage("Not connected to any FB accounts."); 
+                        }
+                    },
+                    {scope: requiredPermissions.join(",")}
+                    );
+        }
+
+        function fblogout(type = undefined) {
+            FB.logout(function(response) {
+                console.log("Logged out.");
+                fb_logout_button.setAttribute("disabled","true");
+                fb_login_button.removeAttribute("disabled");
+                if (type == "internal") {
+                    displayLoginMessage("Logged out successfully.", "append");
+                } else {
+                    displayLoginMessage("Logged out successfully.");
+                }
+            });
+        }
+
+        function place_schedule() {
+            let image_url = document.getElementById("image_url").value;
+            let schedule_date = document.getElementById("schedule_date").value;
+
+            if (image_url && schedule_date) {
+                if (image_url.search("shiftbytes.co.in") != -1) {
+                    displayLoginMessage("Schedule saved.");
+                } else {
+                    displayLoginMessage("Only images stored in shiftbytes can be uploaded.");
+                }
+            } else {
+                displayLoginMessage("All the fields are required.")
+            }
+        }
+      </script>
+      <script async defer crossorigin="anonymous" src="https://connect.facebook.net/en_US/sdk.js"></script>
+      <script>
+            (function () {
+                fb_login_button = document.getElementById("fb_login_button");
+                fb_logout_button = document.getElementById("fb_logout_button");
+                login_message = document.getElementById("login_message");
+                fbPagesList = document.getElementById("fbPagesList");
+                igPagesList = document.getElementById("igPagesList");
+            })();
+      </script>
+</body>
+</html>
