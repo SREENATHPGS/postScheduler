@@ -78,3 +78,32 @@ def createUser():
 
     db.commit()
     return "User created!"
+
+@bp.route('/user/login', methods=['POST'])
+def getUser():
+    return_data = {}
+
+    data = request.get_json()
+
+    username = data.get('username', None)
+    password = data.get('password', None)
+
+    db = get_db()
+
+    if not username:
+        return_data["error"] = "Username is required."
+        return jsonify(return_data)
+    
+    if not password:
+        return_data["error"] = "Password is required."
+        return jsonify(return_data)
+
+    user = db.execute('SELECT * FROM user WHERE username = ?', (username,)).fetchone()
+
+    if not check_password_hash(user["password"], password):
+        return_data["error"] = "Invalid user credentials."
+        return jsonify(return_data)
+    
+    return_data["data"] = {"username": user["username"], "api_key": user["api_key"]}
+
+    return jsonify(return_data)
