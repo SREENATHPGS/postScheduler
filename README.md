@@ -1,6 +1,6 @@
 # Post Scheduler
 
-![postscheduler](./assets/images/postScheduler.png)
+![postscheduler](./thunderShare/assets/images/postScheduler.png)
 
 **Follow postScheduler development blogs on my [blog channel](https://sreenathpgs.wordpress.com/tag/postscheduler/)**
 
