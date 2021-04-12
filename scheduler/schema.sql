@@ -18,5 +18,7 @@ CREATE TABLE post (
     updated TEXT NOT NULL,
     media_link TEXT NOT NULL,
     media_story TEXT,
-    user_id REFERENCES user(id)
+    user_id REFERENCES user(id),
+    post_status TEXT DEFAULT 'saved'
+    -- saved, posted, failed
 );
