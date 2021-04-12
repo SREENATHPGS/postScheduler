@@ -2,6 +2,14 @@ import os
 
 from flask import Flask
 
+from celery import Celery
+
+def make_celery(app_name = __name__):
+    redis_url = "redis://localhost:6379"
+    return Celery(app_name, backend = redis_url, broker = redis_url)
+
+celery = make_celery()
+
 def create_app(test_config = None):
     app = Flask(__name__, instance_relative_config = True)
     app.config.from_mapping(
@@ -30,5 +38,8 @@ def create_app(test_config = None):
 
     from . import auth
     app.register_blueprint(auth.bp)
+
+    from . import schedule_post
+    app.register_blueprint(schedule_post.bp)
     
     return app
