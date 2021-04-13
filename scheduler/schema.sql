@@ -20,5 +20,5 @@ CREATE TABLE post (
     media_story TEXT,
     user_id REFERENCES user(id),
     post_status TEXT DEFAULT 'saved'
-    -- saved, posted, failed
+    -- saved, scheduled, posted, failed
 );
