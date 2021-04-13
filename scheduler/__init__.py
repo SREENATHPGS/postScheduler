@@ -3,10 +3,14 @@ import os
 from flask import Flask
 
 from celery import Celery
+import celeryconfig
+
 
 def make_celery(app_name = __name__):
     redis_url = "redis://localhost:6379"
-    return Celery(app_name, backend = redis_url, broker = redis_url)
+    celery = Celery(app_name, backend = redis_url, broker = redis_url)
+    celery.config_from_object(celeryconfig)
+    return celery
 
 celery = make_celery()
 
