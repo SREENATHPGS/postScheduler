@@ -17,6 +17,8 @@ def schedulerProcessFn(postObject, db):
 
             media_id = create_media_request.json().get("id", None)
             error = create_media_request.json().get("error", None)
+            postObject["post_details"]["error"] = error
+
 
             if not error:
                 postObject["post_details"]["ig_media_id"] = media_id
@@ -27,6 +29,7 @@ def schedulerProcessFn(postObject, db):
 
                 ig_post_id = publish_media_request.json().get("id", None)
                 error = publish_media_request.json().get("error", None)
+                postObject["post_details"]["error"] = error
 
                 if not error:
                     postObject["post_details"]["ig_post_id"] = ig_post_id
@@ -34,10 +37,14 @@ def schedulerProcessFn(postObject, db):
 
                     yetToPost = False
                 else:
+                    db.execute('UPDATE post set post_details=?, post_status=? where id=?',(postObject["post_details"] ,"failed", postObject["id"]))
+
                     print("Error in posting publish media.")
                 
             else:
                 print("Error in create media request.")
+                db.execute('UPDATE post set post_details=?, post_status=? where id=?',(postObject["post_details"] ,"failed", postObject["id"]))
+
 
 
 @celery.task()
