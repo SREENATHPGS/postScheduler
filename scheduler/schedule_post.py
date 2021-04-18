@@ -47,6 +47,7 @@ def createSchedule():
     media_link = data.get('media_link', None)
     media_story = data.get('media_story', None)
     schedule_date = data.get('schedule_date', None)
+    post_details = data.get('post_details', {})
 
     db = get_db()
 
@@ -70,6 +71,12 @@ def createSchedule():
         return_data["error"] = "Schedule date is required."
         return jsonify(return_data)
     
+    if post_details:
+        if not type(post_details) == "dict":
+            return_data["error"] = "Post details should be dict."
+            return jsonify(return_data)
+
+    
     posting_user = db.execute('SELECT id FROM user WHERE username = ? AND api_key = ?',(username,api_key,)).fetchone()
 
     if not posting_user:
@@ -77,7 +84,7 @@ def createSchedule():
         return jsonify(return_data)
     
     db.execute(
-        'INSERT INTO post (date, media_link, media_story, user_id, created, updated) VALUES (?,?,?,?,?,?)', (schedule_date, media_link, media_story, posting_user["id"], datetime.datetime.now(), datetime.datetime.now())
+        'INSERT INTO post (date, media_link, media_story, user_id, post_details, created, updated) VALUES (?,?,?,?,?,?)', (schedule_date, media_link, media_story, posting_user["id"], post_details, datetime.datetime.now(), datetime.datetime.now())
     )
 
     db.commit()
