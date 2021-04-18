@@ -21,5 +21,5 @@ CREATE TABLE post (
     user_id REFERENCES user(id),
     post_status TEXT DEFAULT 'saved',
     post_details JSON NOT NULL
-    -- saved, scheduled, posted, failed
+    -- saved, scheduled, posted, published, failed
 );
