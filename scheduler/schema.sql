@@ -19,6 +19,7 @@ CREATE TABLE post (
     media_link TEXT NOT NULL,
     media_story TEXT,
     user_id REFERENCES user(id),
-    post_status TEXT DEFAULT 'saved'
+    post_status TEXT DEFAULT 'saved',
+    post_details JSON NOT NULL
     -- saved, scheduled, posted, failed
 );
