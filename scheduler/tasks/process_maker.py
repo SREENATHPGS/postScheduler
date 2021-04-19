@@ -12,8 +12,7 @@ def schedulerProcessFn(postObject, db):
         tDiff = int(((date - datetime.now()).total_seconds())/60)
         if tDiff == 0:
             print("Calling instagram apis...")
-            create_media_reuest = requests.post(f'https://graph.facebook.com/{postObject["post_details"]["instagram_id"]}/media?
-            access_token={postObject["post_details"]["access_token"]}&caption={postObject["media_story"]}')
+            create_media_reuest = requests.post(f'https://graph.facebook.com/{postObject["post_details"]["instagram_id"]}/media?access_token={postObject["post_details"]["access_token"]}&caption={postObject["media_story"]}')
 
             media_id = create_media_request.json().get("id", None)
             error = create_media_request.json().get("error", None)
@@ -23,7 +22,7 @@ def schedulerProcessFn(postObject, db):
                 postObject["post_details"]["ig_media_id"] = media_id
 
                 db.execute('UPDATE post set post_details=?,post_status=? where id=?',(postObject["post_details"], "posted", postObject["id"]))
-
+                
                 publish_media_request = requests.post(f'https://graph.facebook.com/{postObject["post_details"]["instagram_id"]}/publish_media?creation_id={postObject["post_details"]["ig_media_id"]}&access_token={postObject["post_details"]["access_token"]}')
 
                 ig_post_id = publish_media_request.json().get("id", None)
