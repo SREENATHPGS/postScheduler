@@ -145,6 +145,10 @@
             spanWrapper.style.backgroundImage = "linear-gradient(to right, white , #a545cc)";
             spanElement.innerHTML = pageid;
             spanWrapper.appendChild(spanElement)
+            spanWrapper.onclick = function() {
+                selectedInstagramAccount = pageid;
+                console.log(selectedInstagramAccount+" Selected.");
+            }
             igPagesList.appendChild(spanWrapper);
         }
 
@@ -235,9 +239,32 @@
         function place_schedule() {
             let image_url = document.getElementById("image_url").value;
             let schedule_date = document.getElementById("schedule_date").value;
+            let media_story = "";
+
+            if (!selectedInstagramAccount) {
+                displayLoginMessage("Select an instagram account for posting.");
+                return;
+            }
 
             if (image_url && schedule_date) {
                 if (image_url.search("shiftbytes.co.in") != -1) {
+                    apiCall.postData(
+                        "/schedule_post", 
+                        {
+                            "Content-Type":"application/json",
+                            "SCHEDULER-USERNAME":"sreenathpg",
+                            "SCHEDULER-API-KEY":"NusuygK3qu9dGn8GMHhCrPBgk01aJsA9rCWG5WutdnkIS1gphcM7upvpdd9XhSA5hWge3u8zYTVAgLg_wb5jxA"
+                        },
+                        [],
+                        {
+                            "media_link": image_url,
+                            "media_story": media_story,
+                            "schedule_date" : schedule_date,
+                            "post_details" : {
+                                "instagram_id" : selectedInstagramAccount,
+                                "access_token" : FB.getAccessToken()
+                            }
+                        });
                     displayLoginMessage("Schedule saved.");
                 } else {
                     displayLoginMessage("Only images stored in shiftbytes can be uploaded.");
