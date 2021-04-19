@@ -145,10 +145,10 @@
             spanWrapper.style.backgroundImage = "linear-gradient(to right, white , #a545cc)";
             spanElement.innerHTML = pageid;
             spanWrapper.appendChild(spanElement)
-            spanWrapper.onclick = function() {
+            spanWrapper.addEventListener('click', function() {
                 selectedInstagramAccount = pageid;
                 console.log(selectedInstagramAccount+" Selected.");
-            }
+            }, false);
             igPagesList.appendChild(spanWrapper);
         }
 
