@@ -41,7 +41,7 @@ def create_app(test_config = None):
     db.init_app(app)
 
     from . import auth
-    app.register_blueprint(auth.bp, url_prefix="/scheduler")
+    app.register_blueprint(auth.bp, url_prefix="/scheduler/auth")
 
     from . import schedule_post
     app.register_blueprint(schedule_post.bp, url_prefix="/scheduler")
