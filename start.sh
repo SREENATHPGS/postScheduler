@@ -32,7 +32,7 @@ function startProcesses() {
     echo $! > ./beats.pid
 
     echo "Starting celery worker."
-    celery -A celery_worker.celery worker --loglevel=info 1>> ./celery_out.log 2>> ./celery_err.log &
+    nohup celery -A celery_worker.celery worker --loglevel=info 1>> ./celery_out.log 2>> ./celery_err.log &
     echo $! > ./celery.pid
 
 }
