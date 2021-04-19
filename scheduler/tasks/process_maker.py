@@ -19,7 +19,6 @@ def schedulerProcessFn(postObject, db):
             error = create_media_request.json().get("error", None)
             postObject["post_details"]["error"] = error
 
-
             if not error:
                 postObject["post_details"]["ig_media_id"] = media_id
 
@@ -45,8 +44,6 @@ def schedulerProcessFn(postObject, db):
                 print("Error in create media request.")
                 db.execute('UPDATE post set post_details=?, post_status=? where id=?',(postObject["post_details"] ,"failed", postObject["id"]))
 
-
-
 @celery.task()
 def create_processes():
     print("Forking every minute.")
@@ -61,5 +58,3 @@ def create_processes():
             print("placing task.")
             schedulerProcess = multiprocessing.Process(name = "schedulerProcess", target = schedulerProcessFn, args = [post, db])
             schedulerProcess.start()
-
-
