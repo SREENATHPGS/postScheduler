@@ -1,6 +1,6 @@
 import functools
 
-import secrets, re, datetime
+import secrets, re, datetime, json
 from flask import Blueprint, flash, g, redirect, render_template, request, session, url_for, jsonify
 
 from werkzeug.security import check_password_hash, generate_password_hash
@@ -72,7 +72,7 @@ def createSchedule():
         return jsonify(return_data)
     
     if post_details:
-        if not type(post_details) == "dict":
+        if not isinstance(post_details, dict):
             return_data["error"] = "Post details should be dict."
             return jsonify(return_data)
 
@@ -84,7 +84,7 @@ def createSchedule():
         return jsonify(return_data)
     
     db.execute(
-        'INSERT INTO post (date, media_link, media_story, user_id, post_details, created, updated) VALUES (?,?,?,?,?,?)', (schedule_date, media_link, media_story, posting_user["id"], post_details, datetime.datetime.now(), datetime.datetime.now())
+        'INSERT INTO post (date, media_link, media_story, user_id, post_details, created, updated) VALUES (?,?,?,?,?,?,?)', (schedule_date, media_link, media_story, posting_user["id"], json.dumps(post_details), datetime.datetime.now(), datetime.datetime.now())
     )
 
     db.commit()
