@@ -2,7 +2,11 @@ from scheduler import celery
 from scheduler.db import get_db
 from datetime import datetime
 import billiard as multiprocessing
-import requests, json
+import requests, json, pytz, time
+
+tzoneMap = {
+    "IST" : "Asia/Calcutta"
+}
 
 def schedulerProcessFn(postObject, db):
     print(f'Posting......{postObject["id"]}')
@@ -61,7 +65,13 @@ def create_processes():
     # db.row_factory = dict_factory
     posts = db.execute('SELECT * FROM post WHERE post_status =?',("saved",)).fetchall()
     for post in posts:
-        date = datetime.strptime(post["date"], '%d-%m-%Y:%H:%M:%S') #12-04-2020:23:30:00
+        date = post["date"]
+        if time.tzname[0] == "UTC":
+            timezone = tzoneMap[date.split(":")[-1]]
+            date = datetime.strptime(post["date"], '%d-%m-%Y:%H:%M:%S:%Z') #12-04-2020:23:30:00:IST
+            date.replace(tzinfo=pytz.timezone(timezone))
+            date = date.astimezone(pytz.UTC)
+            print(f"Date converted to UTC as system timezone is {time.tzname}")
         print(date, datetime.now())
         tDiff = int(((date - datetime.now()).total_seconds())/60)
         print(tDiff)
