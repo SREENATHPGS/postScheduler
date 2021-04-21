@@ -1,5 +1,5 @@
 source venv/bin/activate
-export FLASK_ENV=development
+#export FLASK_ENV=development
 export FLASK_APP=scheduler
 
 function killProcesses() {
@@ -24,7 +24,7 @@ function startProcesses() {
     killProcesses
 
     echo "Starting flask server."
-    nohup flask run 1>> ./server_out.log 2>> ./server_err.log &
+    nohup flask run & #1>> ./server_out.log 2>> ./server_err.log &
     echo $! > ./flask_server.pid
 
     echo "Starting celery beats."
@@ -32,7 +32,7 @@ function startProcesses() {
     echo $! > ./beats.pid
 
     echo "Starting celery worker."
-    nohup celery -A celery_worker.celery worker --loglevel=info 1>> ./celery_out.log 2>> ./celery_err.log &
+    nohup celery -A celery_worker.celery worker --loglevel=info --concurrency=1 1>> ./celery_out.log 2>> ./celery_err.log &
     echo $! > ./celery.pid
 
 }
@@ -50,6 +50,7 @@ function show_help() {
 EOF
 }
 
+
 while :; do
     case $1 in
         -h|-\?|--help)
@@ -59,14 +60,14 @@ while :; do
         -k|--kill)       # Takes an option argument; ensure it has been specified.
             echo "Killing processes."
             killProcesses
+	    break
             shift
-            exit
             ;;
         -s|--start)       # Takes an option argument; ensure it has been specified.
             echo "Starting processes."
             startProcesses
+	    break
             shift
-            exit
             ;;
         # --file=?*)
         #     file=${1#*=} # Delete everything up to "=" and assign the remainder.
