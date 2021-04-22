@@ -87,6 +87,7 @@ def getUser():
 
     username = data.get('username', None)
     password = data.get('password', None)
+    api_key = data.get('api_key', None)
 
     db = get_db()
 
@@ -95,15 +96,32 @@ def getUser():
         return jsonify(return_data)
     
     if not password:
-        return_data["error"] = "Password is required."
-        return jsonify(return_data)
+        if not api_key:
+            return_data["error"] = "Password/Api Key is required."
+            return jsonify(return_data)
 
     user = db.execute('SELECT * FROM user WHERE username = ?', (username,)).fetchone()
 
-    if not check_password_hash(user["password"], password):
-        return_data["error"] = "Invalid user credentials."
+    if not user:
+        return_data["error"] = "No such user."
+        return_data["isValid"] = False
         return jsonify(return_data)
     
-    return_data["data"] = {"username": user["username"], "api_key": user["api_key"]}
+    if password:
+        if not check_password_hash(user["password"], password):
+            return_data["error"] = "Invalid user credentials."
+            return jsonify(return_data)
 
-    return jsonify(return_data)
+        return_data["data"] = {"username": user["username"], "api_key": user["api_key"]}
+
+        return jsonify(return_data)
+
+    if user["api_key"] == api_key:
+        return_data["data"] = {"username": user["username"], "api_key": user["api_key"], "isValid":True}
+        return jsonify(return_data)
+    elif not password:
+        return_data["error"] = "Invalid user credentials."
+        return_data["isValid"] = False
+        return jsonify(return_data)
+
+ 
