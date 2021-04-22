@@ -140,7 +140,7 @@
                     fb_logout_button.removeAttribute("disabled");
                     getFbAccountInfo();
                 } else {
-                    displayLoginMessage("Not logged in to any facebook accounts.")
+                    // displayLoginMessage("Not logged in to any facebook accounts.")
                     fb_logout_button.setAttribute("disabled","true");
                     fb_login_button.removeAttribute("disabled");
                 }
@@ -325,7 +325,7 @@
             if (form) {
                 let username = document.getElementById("username").value;
                 let password = document.getElementById("password").value;
-                if (username && password) {
+                if (!username && !password) {
                     displayLoginMessage("Please enter username and password.");
                     return
                 }
@@ -333,7 +333,7 @@
             } else {
                 let username = getCookie("username");
                 let apiKey = getCookie("apiKey");
-                if (username && apiKey) {
+                if (!username && !apiKey) {
                     console.log("No username and/or api key in cookies");
                     return
                 }
