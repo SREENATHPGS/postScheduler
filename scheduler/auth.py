@@ -112,7 +112,7 @@ def getUser():
             return_data["error"] = "Invalid user credentials."
             return jsonify(return_data)
 
-        return_data["data"] = {"username": user["username"], "api_key": user["api_key"]}
+        return_data["data"] = {"username": user["username"], "api_key": user["api_key"], "isValid":True}
 
         return jsonify(return_data)
 
