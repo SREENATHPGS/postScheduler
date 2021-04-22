@@ -29,14 +29,38 @@
             </div>
         </div>
         <div class="custom_container">
-        <p id="login_message"></p>
-        <div class="row">
+            <p id="login_message"></p>
+            <div class="row">
             <div style="display: flex; flex-direction: row;">
                 <div class = "row" style="width: 50%;" id = "fbPagesList"></div>
                 <div class = "row" style="width: 50%;" id = "igPagesList"></div>
             </div>
         </div>
-        <form id="contactUsForm">
+        <!-- Login Form Start -->
+        <form id="loginForm">
+            <div class="row">
+              <div class="col-25">
+                <label for="username">Username</label>
+              </div>
+              <div class="col-75">
+                <input class="loginInput" type="text" id="username" name="username" placeholder="Enter the username." required>
+              </div>
+            </div>
+            <div class="row">
+              <div class="col-25">
+                <label for="Password">Password</label>
+              </div>
+              <div class="col-75">
+                <input class="loginInput" type="text" id="Password" name="Password" placeholder="Enter the Password" required>
+              </div>
+            </div>
+        
+            <div class="row">
+                <input class="loginInput" type="button" onClick=login() value="Login">
+            </div>            
+        </form>
+        <!-- Login Foem End -->
+        <form id="schedulerForm">
             <div class="row">
               <div class="col-25">
                 <label for="image_url">Image URL</label>
@@ -87,6 +111,7 @@
         </div>
 
         <script src="./assets/js/api_calls.js"></script>
+        <script src="./assets/js/cookie_management.js"></script>
     <script>
         var fb_login_button = undefined; 
         var fb_logout_button = undefined;
@@ -94,6 +119,8 @@
         var fbPagesList = undefined;
         var igPagesList = undefined;
         var selectedInstagramAccount = undefined;
+        var loginForm = undefined;
+        var schedulerForm = undefined;
         var apiCall = new ApiCalls("/");
         var requiredPermissions = ['public_profile', 'instagram_basic', 'pages_show_list', 'instagram_content_publish'];
 
@@ -275,14 +302,55 @@
         }
       </script>
       <script async defer crossorigin="anonymous" src="https://connect.facebook.net/en_US/sdk.js"></script>
-      <script>
-            (function () {
-                fb_login_button = document.getElementById("fb_login_button");
-                fb_logout_button = document.getElementById("fb_logout_button");
-                login_message = document.getElementById("login_message");
-                fbPagesList = document.getElementById("fbPagesList");
-                igPagesList = document.getElementById("igPagesList");
-            })();
+    <script>
+
+        loginForm = document.getElementById("loginForm");
+        schedulerForm = document.getElementById("schedulerForm");
+
+        function doAfterValidate(response) {
+            response = JSON.parse(response);
+            let isValid = response["data"]["isValid"];
+
+            if (isValid) {
+                console.log("User is valid can be logged in.")
+                loginForm.style.display = "none";
+                schedulerForm.style.display = "block";
+            } else {
+                displayLoginMessage("Please Login to continue.")
+            }
+        }
+
+        function validateLogin(form = false) {
+            let postOb = {};
+            if (form) {
+                let username = document.getElementById("username").value;
+                let password = document.getElementById("password").value;
+                if (username && password) {
+                    displayLoginMessage("Please enter username and password.");
+                    return
+                }
+                postOb = {"username":username, "password":password};
+            } else {
+                let username = getCookie("username");
+                let apiKey = getCookie("apiKey");
+                if (username && apiKey) {
+                    console.log("No username and/or api key in cookies");
+                    return
+                }
+                postOb = {"username":username, "api_key":apiKey};
+            }
+            
+            apiCall.postData("scheduler/user/login",{"Content-Type":"application/json"},[], postOb, doAfterValidate)
+        }
+
+        (function () {
+            fb_login_button = document.getElementById("fb_login_button");
+            fb_logout_button = document.getElementById("fb_logout_button");
+            login_message = document.getElementById("login_message");
+            fbPagesList = document.getElementById("fbPagesList");
+            igPagesList = document.getElementById("igPagesList");
+            validateLogin();
+        })();
       </script>
 </body>
 </html>
