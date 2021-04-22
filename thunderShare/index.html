@@ -343,6 +343,10 @@
             apiCall.postData("scheduler/user/login",{"Content-Type":"application/json"},[], postOb, doAfterValidate)
         }
 
+        function login() {
+            validateLogin(true);
+        }
+
         (function () {
             fb_login_button = document.getElementById("fb_login_button");
             fb_logout_button = document.getElementById("fb_logout_button");
