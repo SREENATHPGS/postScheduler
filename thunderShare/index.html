@@ -340,7 +340,7 @@
                 postOb = {"username":username, "api_key":apiKey};
             }
             
-            apiCall.postData("scheduler/user/login",{"Content-Type":"application/json"},[], postOb, doAfterValidate)
+            apiCall.postData("scheduler/auth/user/login",{"Content-Type":"application/json"},[], postOb, doAfterValidate)
         }
 
         function login() {
