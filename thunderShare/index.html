@@ -337,6 +337,8 @@
                 let api_key = getCookie("api_key");
                 if (!username && !api_key) {
                     console.log("No username and/or api key in cookies");
+                    loginForm.style.display = "block";
+                    schedulerForm.style.display = "none";
                     return
                 }
                 postOb = {"username":username, "api_key":api_key};
@@ -347,6 +349,13 @@
 
         function login() {
             validateLogin(true);
+        }
+
+        function logout() {
+            deleteCookie("username");
+            deleteCookie("apiKey");
+            validateLogin();
+            // apiCall.postData("scheduler/auth/user/logout",{"Content-Type":"application/json"},[], postOb, doAfterValidate);
         }
 
         (function () {
