@@ -292,7 +292,7 @@ input[type=button]:hover {
 }
 /* End of commons */
 
-/* Contact Us Page */
+/*  Us Page */
 
 .contact_us_main_container {
 	padding: 20px;
@@ -590,6 +590,14 @@ blog_title_image {
 
 #submitButton {
 	background-color: #a545cc;
+}
+
+#loginForm {
+	display: none;
+}
+
+#schedulerForm {
+	display: none;
 }
 
 .fb_bg {
