@@ -312,7 +312,9 @@
             let isValid = response["data"]["isValid"];
 
             if (isValid) {
-                console.log("User is valid can be logged in.")
+                console.log("User is valid can be logged in.");
+                setCookie("usename", response["data"]["username"]);
+                setCookie("api_key", response["data"]["api_key"]);
                 loginForm.style.display = "none";
                 schedulerForm.style.display = "block";
             } else {
