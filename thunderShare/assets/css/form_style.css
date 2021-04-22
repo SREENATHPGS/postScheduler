@@ -593,7 +593,7 @@ blog_title_image {
 }
 
 #loginForm {
-	display: none;
+	display: block;
 }
 
 #schedulerForm {
