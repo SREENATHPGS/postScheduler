@@ -334,12 +334,12 @@
                 postOb = {"username":username, "password":password};
             } else {
                 let username = getCookie("username");
-                let apiKey = getCookie("apiKey");
-                if (!username && !apiKey) {
+                let api_key = getCookie("api_key");
+                if (!username && !api_key) {
                     console.log("No username and/or api key in cookies");
                     return
                 }
-                postOb = {"username":username, "api_key":apiKey};
+                postOb = {"username":username, "api_key":api_key};
             }
             
             apiCall.postData("scheduler/auth/user/login",{"Content-Type":"application/json"},[], postOb, doAfterValidate)
