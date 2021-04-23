@@ -88,7 +88,9 @@ def createSchedule():
     )
 
     db.commit()
-    return "Schedule action added to database.!"
+    return_data["status"] = "success"
+    return_data["message"] = "Schedule action added to database.!"
+    return jsonify(return_data)
 
 @bp.route('/schedule_post', methods=['GET'])
 def getSchedule():
