@@ -77,6 +77,14 @@
                 <input class="loginInput" type="text" id="schedule_date" name="schedule_date" placeholder="dd-mm-yyyy:hh:mm:ss:+zh:zm" required>
               </div>
             </div>
+            <div class="row">
+                <div class="col-25">
+                  <label for="media_story">Media Story</label>
+                </div>
+                <div class="col-75">
+                  <input class="loginInput" type="text" id="media_story" name="media_story" placeholder="hashtags, stories" required>
+                </div>
+              </div>
         
             <!-- <div class="row">
               <div class="col-25">
@@ -266,7 +274,7 @@
         function place_schedule() {
             let image_url = document.getElementById("image_url").value;
             let schedule_date = document.getElementById("schedule_date").value;
-            let media_story = "";
+            let media_story = document.getElementById("media_story").value;
 
             if (!selectedInstagramAccount) {
                 displayLoginMessage("Select an instagram account for posting.");
