@@ -291,6 +291,10 @@
                                 "instagram_id" : selectedInstagramAccount,
                                 "access_token" : FB.getAccessToken()
                             }
+                        },
+                        function(response) {
+                            let resp = JSON.parse(response);
+                            console.log(resp);
                         });
                     displayLoginMessage("Schedule saved.");
                 } else {
