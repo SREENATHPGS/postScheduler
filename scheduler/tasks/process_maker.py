@@ -67,9 +67,7 @@ def create_processes():
     for post in posts:
         date = post["date"]
         if time.tzname[0] == "UTC":
-            timezone = tzoneMap[date.split(":")[-1]]
-            date = datetime.strptime(post["date"], '%d-%m-%Y:%H:%M:%S:%Z') #12-04-2020:23:30:00:IST
-            date.replace(tzinfo=pytz.timezone(timezone))
+            date = datetime.strptime(post["date"], '%d-%m-%Y:%H:%M:%S:%z') #12-04-2020:23:30:00:IST
             date = date.astimezone(pytz.UTC)
             print(f"Date converted to UTC as system timezone is {time.tzname}")
         print(date, datetime.now())
