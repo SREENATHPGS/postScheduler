@@ -1,6 +1,6 @@
 from scheduler import celery
 from scheduler.db import get_db
-from datetime import datetime
+from datetime import datetime, timezone
 import billiard as multiprocessing
 import requests, json, pytz, time
 
@@ -10,10 +10,10 @@ tzoneMap = {
 
 def schedulerProcessFn(postObject, db):
     print(f'Posting......{postObject["id"]}')
-    date = datetime.strptime(postObject["date"], '%d-%m-%Y:%H:%M:%S') #12-04-2020:23:30:00
+    date = datetime.strptime(postObject["date"], '%d-%m-%Y:%H:%M:%S:%z') #12-04-2020:23:30:00:+05:30
     yetToPost = True
     while yetToPost:
-        tDiff = int(((date - datetime.now()).total_seconds())/60)
+        tDiff = int(((date - datetime.now(timezone.utc)).total_seconds())/60)
         if tDiff == 0:
             print("Calling instagram apis...")
             post_details = json.loads(postObject["post_details"])
@@ -67,11 +67,11 @@ def create_processes():
     for post in posts:
         date = post["date"]
         if time.tzname[0] == "UTC":
-            date = datetime.strptime(post["date"], '%d-%m-%Y:%H:%M:%S:%z') #12-04-2020:23:30:00:IST
+            date = datetime.strptime(post["date"], '%d-%m-%Y:%H:%M:%S:%z') 
             date = date.astimezone(pytz.UTC)
             print(f"Date converted to UTC as system timezone is {time.tzname}")
         print(date, datetime.now())
-        tDiff = int(((date - datetime.now()).total_seconds())/60)
+        tDiff = int(((date - datetime.now(timezone.utc)).total_seconds())/60)
         print(tDiff)
         if -5 <= tDiff <= 5:
             print("placing task.")
