@@ -139,6 +139,8 @@
                 xfbml            : true,
                 version          : 'v10.0'
             });
+
+            init();
         };
 
         var fbLoginStatus = FB.getLoginStatus(function(response) {
@@ -329,7 +331,6 @@
                 setCookie("api_key", response["data"]["api_key"]);
                 loginForm.style.display = "none";
                 schedulerForm.style.display = "block";
-                fbLoginStatus();
             } else {
                 displayLoginMessage("Please Login to continue.")
             }
@@ -371,14 +372,14 @@
             // apiCall.postData("scheduler/auth/user/logout",{"Content-Type":"application/json"},[], postOb, doAfterValidate);
         }
 
-        (function () {
+        var init = function () {
             fb_login_button = document.getElementById("fb_login_button");
             fb_logout_button = document.getElementById("fb_logout_button");
             login_message = document.getElementById("login_message");
             fbPagesList = document.getElementById("fbPagesList");
             igPagesList = document.getElementById("igPagesList");
             validateLogin();
-        })();
+        };
       </script>
 </body>
 </html>
