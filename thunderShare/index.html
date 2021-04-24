@@ -313,7 +313,7 @@
             let validation_type = response["data"]["validation_type"];
 
             if (isValid) {
-                console.log("Successfully logged in.");
+                displayLoginMessage("Successfully logged in.");
                 setCookie("username", response["data"]["username"]);
                 setCookie("api_key", response["data"]["api_key"]);
                 loginForm.style.display = "none";
