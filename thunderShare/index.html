@@ -318,7 +318,20 @@
                 setCookie("api_key", response["data"]["api_key"]);
                 loginForm.style.display = "none";
                 schedulerForm.style.display = "block";
-                fbLoginStatus();
+                
+                FB.getLoginStatus(function(response) {
+                    // console.log(response);
+                    if (response.status == "connected") {
+                        displayLoginMessage("Logged in");
+                        fb_login_button.setAttribute("disabled","true");
+                        fb_logout_button.removeAttribute("disabled");
+                        getFbAccountInfo();
+                    } else {
+                        // displayLoginMessage("Not logged in to any facebook accounts.")
+                        fb_logout_button.setAttribute("disabled","true");
+                        fb_login_button.removeAttribute("disabled");
+                    }
+                });
             } else {
                 displayLoginMessage("Please Login to continue.")
             }
@@ -368,20 +381,6 @@
             login_message = document.getElementById("login_message");
             fbPagesList = document.getElementById("fbPagesList");
             igPagesList = document.getElementById("igPagesList");
-            
-            fbLoginStatus = FB.getLoginStatus(function(response) {
-                // console.log(response);
-                if (response.status == "connected") {
-                    displayLoginMessage("Logged in");
-                    fb_login_button.setAttribute("disabled","true");
-                    fb_logout_button.removeAttribute("disabled");
-                    getFbAccountInfo();
-                } else {
-                    // displayLoginMessage("Not logged in to any facebook accounts.")
-                    fb_logout_button.setAttribute("disabled","true");
-                    fb_login_button.removeAttribute("disabled");
-                }
-            });
 
             validateLogin();
         };
