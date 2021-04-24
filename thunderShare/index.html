@@ -317,6 +317,7 @@
                 setCookie("username", response["data"]["username"]);
                 setCookie("api_key", response["data"]["api_key"]);
                 loginForm.style.display = "none";
+                loginForm.reset();
                 schedulerForm.style.display = "block";
                 
                 FB.getLoginStatus(function(response) {
