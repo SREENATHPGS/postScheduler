@@ -74,7 +74,8 @@ def create_processes():
             print(date, datetime.now())
             tDiff = int(((date - datetime.now(timezone.utc)).total_seconds())/60)
             print(tDiff)
-            if -5 <= tDiff <= 5:
+            # if -5 <= tDiff <= 5:
+            if tDiff <= 5:
                 print("placing task.")
                 schedulerProcess = multiprocessing.Process(name = "schedulerProcess", target = schedulerProcessFn, args = [post, db])
                 db.execute('UPDATE post set post_status=? where id=?', ("processing", post["id"]))
