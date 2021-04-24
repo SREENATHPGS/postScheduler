@@ -88,7 +88,7 @@
 	box-sizing: border-box;
 }
 
-input[type=text], input[type=password],select, textarea {
+input[type=text], input[type=password], input[type=date],input[type=time],input[type="datetime-local"], select, textarea {
 	width: 100%;
 	padding: 12px;
 	border: 1px solid #ccc;
@@ -599,7 +599,6 @@ blog_title_image {
 #app_logout_button {
 	float: left;
 	background-color: #b40000;
-
 }
 
 #schedulerForm {
@@ -609,4 +608,8 @@ blog_title_image {
 .fb_bg {
 	/* background-color: #4f79af; */
 	background-image: linear-gradient(to left, white , #4f79af);
+}
+
+.app_bg {
+	background-image: linear-gradient(to left, white , #a545cc);
 }

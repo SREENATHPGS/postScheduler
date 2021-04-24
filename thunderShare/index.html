@@ -74,7 +74,7 @@
                 <label for="schedule_date">Schedule Date</label>
               </div>
               <div class="col-75">
-                <input class="loginInput" type="text" id="schedule_date" name="schedule_date" placeholder="dd-mm-yyyy:hh:mm:ss:+zh:zm" required>
+                <input class="loginInput" type="datetime-local" id="schedule_date" name="schedule_date" placeholder="yyyy-mm-dd:hh:mm:ss:+zh:zm" required>
               </div>
             </div>
             <div class="row">
@@ -110,7 +110,7 @@
                 <input class="loginInput" type="button" onClick=place_schedule() id="submitButton" value="Schedule">
             </div>
             
-            <div class="row fb_bg   ">
+            <div class="row fb_bg">
                 <input class="loginInput" type="button" onClick=fblogin() id="fb_login_button" value="FB Login">
                 <input class="loginInput" type="button" onClick=fblogout() id="fb_logout_button" value="FB Logout">
             </div>
@@ -266,13 +266,14 @@
             let image_url = document.getElementById("image_url").value;
             let schedule_date = document.getElementById("schedule_date").value;
             let media_story = document.getElementById("media_story").value;
-
+            
             if (!selectedInstagramAccount) {
                 displayLoginMessage("Select an instagram account for posting.");
                 return;
             }
-
+            
             if (image_url && schedule_date) {
+                schedule_date = schedule_date.replace("T", ":")+":+05:30";
                 if (image_url.search("shiftbytes.co.in") != -1) {
                     apiCall.postData(
                         "scheduler/schedule_post", 
