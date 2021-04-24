@@ -313,7 +313,7 @@
             let validation_type = response["data"]["validation_type"];
 
             if (isValid) {
-                console.log("User is valid can be logged in.");
+                console.log("Successfully logged in.");
                 setCookie("username", response["data"]["username"]);
                 setCookie("api_key", response["data"]["api_key"]);
                 loginForm.style.display = "none";
@@ -322,12 +322,12 @@
                 FB.getLoginStatus(function(response) {
                     // console.log(response);
                     if (response.status == "connected") {
-                        displayLoginMessage("Logged in");
+                        displayLoginMessage("Logged into FB account", "append");
                         fb_login_button.setAttribute("disabled","true");
                         fb_logout_button.removeAttribute("disabled");
                         getFbAccountInfo();
                     } else {
-                        // displayLoginMessage("Not logged in to any facebook accounts.")
+                        displayLoginMessage("Please login into your facebook account.", "append")
                         fb_logout_button.setAttribute("disabled","true");
                         fb_login_button.removeAttribute("disabled");
                     }
