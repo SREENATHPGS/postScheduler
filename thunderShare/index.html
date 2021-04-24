@@ -143,20 +143,6 @@
             init();
         };
 
-        var fbLoginStatus = FB.getLoginStatus(function(response) {
-            // console.log(response);
-            if (response.status == "connected") {
-                displayLoginMessage("Logged in");
-                fb_login_button.setAttribute("disabled","true");
-                fb_logout_button.removeAttribute("disabled");
-                getFbAccountInfo();
-            } else {
-                // displayLoginMessage("Not logged in to any facebook accounts.")
-                fb_logout_button.setAttribute("disabled","true");
-                fb_login_button.removeAttribute("disabled");
-            }
-        });
-
         function appendFbPage(page) {
             let spanWrapper = document.createElement("div");
             let spanElement = document.createElement("span");
@@ -373,6 +359,21 @@
         }
 
         var init = function () {
+            
+            FB.getLoginStatus(function(response) {
+                // console.log(response);
+                if (response.status == "connected") {
+                    displayLoginMessage("Logged in");
+                    fb_login_button.setAttribute("disabled","true");
+                    fb_logout_button.removeAttribute("disabled");
+                    getFbAccountInfo();
+                } else {
+                    // displayLoginMessage("Not logged in to any facebook accounts.")
+                    fb_logout_button.setAttribute("disabled","true");
+                    fb_login_button.removeAttribute("disabled");
+                }
+            });
+
             fb_login_button = document.getElementById("fb_login_button");
             fb_logout_button = document.getElementById("fb_logout_button");
             login_message = document.getElementById("login_message");
