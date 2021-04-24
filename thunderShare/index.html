@@ -310,6 +310,7 @@
         function doAfterValidate(response) {
             response = JSON.parse(response);
             let isValid = response["data"]["isValid"];
+            let validation_type = response["data"]["validation_type"];
 
             if (isValid) {
                 console.log("User is valid can be logged in.");
@@ -332,7 +333,13 @@
                     }
                 });
             } else {
-                displayLoginMessage("Please Login to continue.")
+                if (validation_type == "password") {
+                    displayLoginMessage("Please check your usename or passowrd.")
+                } else if (validation_type == "api_key"){
+                    displayLoginMessage("Looks like your api key expired or is changed.")
+                } else {
+                    displayLoginMessage("Please login to continue.")
+                }
             }
         }
 
