@@ -337,7 +337,12 @@
                         fb_login_button.removeAttribute("disabled");
                     }
                 });
+
+                fbPagesList.style.display = "block";
+                igPagesList.style.display = "block";
             } else {
+                fbPagesList.style.display = "none";
+                igPagesList.style.display = "none";
                 if (validation_type == "password") {
                     displayLoginMessage("Please check your usename or passowrd.")
                 } else if (validation_type == "api_key"){
