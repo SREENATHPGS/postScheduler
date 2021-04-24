@@ -357,7 +357,8 @@
                 let username = getCookie("username");
                 let api_key = getCookie("api_key");
                 if (!username && !api_key) {
-                    console.log("No username and/or api key in cookies");
+                    displayLoginMessage("Please login to continue.")
+                    // console.log("No username and/or api key in cookies");
                     loginForm.style.display = "block";
                     schedulerForm.style.display = "none";
                     return
