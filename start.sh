@@ -24,7 +24,7 @@ function startProcesses() {
     killProcesses
 
     echo "Starting flask server."
-    nohup flask run & #1>> ./server_out.log 2>> ./server_err.log &
+    nohup flask run 1>> ./server_out.log 2>> ./server_err.log &
     echo $! > ./flask_server.pid
 
     echo "Starting celery beats."
