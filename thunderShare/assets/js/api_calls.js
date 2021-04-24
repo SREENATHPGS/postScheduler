@@ -21,7 +21,7 @@ class ApiCalls	{
 			for (var i = params.length - 1; i >= 0; i--) {
 				url = url+"?"+params[i]
 			}
-			console.log("url after adding parameters "+path);
+			// console.log("url after adding parameters "+path);
 		}
 
 		setParameters(parameters);
@@ -34,14 +34,14 @@ class ApiCalls	{
 					if (callbackFunction){
 						callbackFunction(response)
 					} else {
-						console.log(response);
+						// console.log(response);
 					}
 				} else {
-					console.log("Non 200 response code: "+http.status)
+					// console.log("Non 200 response code: "+http.status)
 					return "failure from server."
 				}
 			} else {
-				console.log("Non success readyState: "+http.readyState)
+				// console.log("Non success readyState: "+http.readyState)
 				return "failure from http.open."
 			}
 		};
@@ -67,17 +67,17 @@ class ApiCalls	{
 						callbackFunction(response)
 					}
 				} else {
-					console.log("Non 200 response code: "+http.status)
+					// console.log("Non 200 response code: "+http.status)
 					return "failure from server."
 				}
 			} else {
-				console.log("Non success readyState: "+http.readyState)
+				// console.log("Non success readyState: "+http.readyState)
 				return "failure from http.open."
 			}
 		};
-		console.log(payload)
+		// console.log(payload)
 		let data = JSON.stringify(payload)
-		console.log(data)
+		// console.log(data)
 		http.send(data);
 
 	}
@@ -100,17 +100,17 @@ class ApiCalls	{
 						callbackFunction(response)
 					}
 				} else {
-					console.log("Non 200 response code: "+http.status)
+					// console.log("Non 200 response code: "+http.status)
 					return "failure from server."
 				}
 			} else {
-				console.log("Non success readyState: "+http.readyState)
+				// console.log("Non success readyState: "+http.readyState)
 				return "failure from http.open."
 			}
 		};
-		console.log(payload);
+		// console.log(payload);
 		let data = JSON.stringify(payload);
-		console.log(data)
+		// console.log(data)
 		http.send(data);
 	}
 
@@ -132,17 +132,17 @@ class ApiCalls	{
 						callbackFunction(response)
 					}
 				} else {
-					console.log("Non 200 response code: "+http.status)
+					// console.log("Non 200 response code: "+http.status)
 					return "failure from server."
 				}
 			} else {
-				console.log("Non success readyState: "+http.readyState)
+				// console.log("Non success readyState: "+http.readyState)
 				return "failure from http.open."
 			}
 		};
-		console.log(payload)
+		// console.log(payload)
 		let data = JSON.stringify(payload)
-		console.log(data)
+		// console.log(data)
 		http.send(data);
 	}
 
@@ -177,14 +177,14 @@ class ApiCalls	{
 						if (callbackFunction){
 							callbackFunction(response)
 						} else {
-							console.log(response);
+							// console.log(response);
 						}
 					} else {
-						console.log("Non 200 response code: "+http.status)
+						// console.log("Non 200 response code: "+http.status)
 						return "failure from server."
 					}
 				} else {
-					console.log("Non success readyState: "+http.readyState)
+					// console.log("Non success readyState: "+http.readyState)
 					return "failure from http.open."
 				}
 			};
