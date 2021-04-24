@@ -129,6 +129,7 @@
         var selectedInstagramAccount = undefined;
         var loginForm = undefined;
         var schedulerForm = undefined;
+        var fbLoginStatus = undefined;
         var apiCall = new ApiCalls("/");
         var requiredPermissions = ['public_profile', 'instagram_basic', 'pages_show_list', 'instagram_content_publish'];
 
@@ -317,6 +318,7 @@
                 setCookie("api_key", response["data"]["api_key"]);
                 loginForm.style.display = "none";
                 schedulerForm.style.display = "block";
+                fbLoginStatus();
             } else {
                 displayLoginMessage("Please Login to continue.")
             }
@@ -367,7 +369,7 @@
             fbPagesList = document.getElementById("fbPagesList");
             igPagesList = document.getElementById("igPagesList");
             
-            FB.getLoginStatus(function(response) {
+            fbLoginStatus = FB.getLoginStatus(function(response) {
                 // console.log(response);
                 if (response.status == "connected") {
                     displayLoginMessage("Logged in");
