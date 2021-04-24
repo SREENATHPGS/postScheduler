@@ -112,19 +112,21 @@ def getUser():
         if not check_password_hash(user["password"], password):
             return_data["data"]["error"] = "Invalid user credentials.";
             return_data["data"]["isValid"] = False
+            return_data["data"]["validation_type"] = "password"
             
             return jsonify(return_data)
 
-        return_data["data"] = {"username": user["username"], "api_key": user["api_key"], "isValid":True}
+        return_data["data"] = {"username": user["username"], "api_key": user["api_key"], "isValid":True, "validation_type":"password"}
 
         return jsonify(return_data)
 
     if user["api_key"] == api_key:
-        return_data["data"] = {"username": user["username"], "api_key": user["api_key"], "isValid":True}
+        return_data["data"] = {"username": user["username"], "api_key": user["api_key"], "isValid":True, "validation_type":"api_key"}
         return jsonify(return_data)
     elif not password:
         return_data["data"]["error"] = "Invalid user credentials."
         return_data["data"]["isValid"] = False
+        return_data["data"]["validation_type"] = "api_key"
         return jsonify(return_data)
 
  
