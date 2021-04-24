@@ -360,6 +360,13 @@
 
         var init = function () {
             
+            
+            fb_login_button = document.getElementById("fb_login_button");
+            fb_logout_button = document.getElementById("fb_logout_button");
+            login_message = document.getElementById("login_message");
+            fbPagesList = document.getElementById("fbPagesList");
+            igPagesList = document.getElementById("igPagesList");
+            
             FB.getLoginStatus(function(response) {
                 // console.log(response);
                 if (response.status == "connected") {
@@ -374,11 +381,6 @@
                 }
             });
 
-            fb_login_button = document.getElementById("fb_login_button");
-            fb_logout_button = document.getElementById("fb_logout_button");
-            login_message = document.getElementById("login_message");
-            fbPagesList = document.getElementById("fbPagesList");
-            igPagesList = document.getElementById("igPagesList");
             validateLogin();
         };
       </script>
