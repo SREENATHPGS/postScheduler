@@ -81,7 +81,9 @@ def create_processes():
                 db.commit()
                 schedulerProcess.start()
         except Exception as e:
-            post_details = {"error":"Task processing failed.", "stacktrace":f"{e}"}
+            post_details = json.loads(post["post_details"])
+            post_details["error"] = "Task processing failed." 
+            post_details["stacktrace"]= f"{e}"
             db.execute('UPDATE post set post_details=?, post_status=? where id=?', (json.dumps(post_details), "failed", post["id"]))
             db.commit()
             print("Task processing failed.")
