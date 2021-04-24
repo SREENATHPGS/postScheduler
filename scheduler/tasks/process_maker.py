@@ -65,17 +65,24 @@ def create_processes():
     # db.row_factory = dict_factory
     posts = db.execute('SELECT * FROM post WHERE post_status =?',("saved",)).fetchall()
     for post in posts:
-        date = post["date"]
-        if time.tzname[0] == "UTC":
-            date = datetime.strptime(post["date"], '%Y-%m-%d:%H:%M:%S:%z') 
-            date = date.astimezone(pytz.UTC)
-            print(f"Date converted to UTC as system timezone is {time.tzname}")
-        print(date, datetime.now())
-        tDiff = int(((date - datetime.now(timezone.utc)).total_seconds())/60)
-        print(tDiff)
-        if -5 <= tDiff <= 5:
-            print("placing task.")
-            schedulerProcess = multiprocessing.Process(name = "schedulerProcess", target = schedulerProcessFn, args = [post, db])
-            db.execute('UPDATE post set post_status=? where id=?', ("processing", post["id"]))
+        try:
+            date = post["date"]
+            if time.tzname[0] == "UTC":
+                date = datetime.strptime(post["date"], '%Y-%m-%d:%H:%M:%S:%z') 
+                date = date.astimezone(pytz.UTC)
+                print(f"Date converted to UTC as system timezone is {time.tzname}")
+            print(date, datetime.now())
+            tDiff = int(((date - datetime.now(timezone.utc)).total_seconds())/60)
+            print(tDiff)
+            if -5 <= tDiff <= 5:
+                print("placing task.")
+                schedulerProcess = multiprocessing.Process(name = "schedulerProcess", target = schedulerProcessFn, args = [post, db])
+                db.execute('UPDATE post set post_status=? where id=?', ("processing", post["id"]))
+                db.commit()
+                schedulerProcess.start()
+        except Exception as e:
+            post_details = {"error":"Task processing failed.", "stacktrace":f"{e}"}
+            db.execute('UPDATE post set post_details=?, post_status=? where id=?', (json.dumps(post_details), "failed", post["id"]))
             db.commit()
-            schedulerProcess.start()
+            print("Task processing failed.")
+            print(e)
