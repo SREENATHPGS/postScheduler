@@ -139,21 +139,21 @@
                 xfbml            : true,
                 version          : 'v10.0'
             });
-            
-            FB.getLoginStatus(function(response) {
-                // console.log(response);
-                if (response.status == "connected") {
-                    displayLoginMessage("Logged in");
-                    fb_login_button.setAttribute("disabled","true");
-                    fb_logout_button.removeAttribute("disabled");
-                    getFbAccountInfo();
-                } else {
-                    // displayLoginMessage("Not logged in to any facebook accounts.")
-                    fb_logout_button.setAttribute("disabled","true");
-                    fb_login_button.removeAttribute("disabled");
-                }
-            });
         };
+
+        var fbLoginStatus = FB.getLoginStatus(function(response) {
+            // console.log(response);
+            if (response.status == "connected") {
+                displayLoginMessage("Logged in");
+                fb_login_button.setAttribute("disabled","true");
+                fb_logout_button.removeAttribute("disabled");
+                getFbAccountInfo();
+            } else {
+                // displayLoginMessage("Not logged in to any facebook accounts.")
+                fb_logout_button.setAttribute("disabled","true");
+                fb_login_button.removeAttribute("disabled");
+            }
+        });
 
         function appendFbPage(page) {
             let spanWrapper = document.createElement("div");
@@ -329,6 +329,7 @@
                 setCookie("api_key", response["data"]["api_key"]);
                 loginForm.style.display = "none";
                 schedulerForm.style.display = "block";
+                fbLoginStatus();
             } else {
                 displayLoginMessage("Please Login to continue.")
             }
