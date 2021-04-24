@@ -596,6 +596,12 @@ blog_title_image {
 	display: block;
 }
 
+#app_logout_button {
+	float: left;
+	background-color: #b40000;
+
+}
+
 #schedulerForm {
 	display: none;
 }
