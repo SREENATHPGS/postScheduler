@@ -338,11 +338,9 @@
                     }
                 });
 
-                fbPagesList.style.display = "block";
-                igPagesList.style.display = "block";
+                fbDetails("show");
             } else {
-                fbPagesList.style.display = "none";
-                igPagesList.style.display = "none";
+                fbDetails("hide");
                 if (validation_type == "password") {
                     displayLoginMessage("Please check your usename or passowrd.")
                 } else if (validation_type == "api_key"){
@@ -350,6 +348,16 @@
                 } else {
                     displayLoginMessage("Please login to continue.")
                 }
+            }
+        }
+
+        function fbDetails(doWhat = "show") {
+            if (doWhat == "show") {
+                fbPagesList.style.display = "block";
+                igPagesList.style.display = "block";
+            } else if (doWhat == "hide") {
+                fbPagesList.style.display = "none";
+                igPagesList.style.display = "none";
             }
         }
 
@@ -371,6 +379,7 @@
                     // console.log("No username and/or api key in cookies");
                     loginForm.style.display = "block";
                     schedulerForm.style.display = "none";
+                    fbDetails("hide");
                     return
                 }
                 postOb = {"username":username, "api_key":api_key};
