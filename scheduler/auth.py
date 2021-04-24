@@ -82,6 +82,7 @@ def createUser():
 @bp.route('/user/login', methods=['POST'])
 def getUser():
     return_data = {}
+    return_data["data"] = {}
 
     data = request.get_json()
 
@@ -92,25 +93,26 @@ def getUser():
     db = get_db()
 
     if not username:
-        return_data["error"] = "Username is required."
+        return_data["data"]["error"] = "Username is required."
         return jsonify(return_data)
     
     if not password:
         if not api_key:
-            return_data["error"] = "Password/Api Key is required."
+            return_data["data"]["error"] = "Password/Api Key is required."
             return jsonify(return_data)
 
     user = db.execute('SELECT * FROM user WHERE username = ?', (username,)).fetchone()
 
     if not user:
-        return_data["error"] = "No such user."
-        return_data["isValid"] = False
+        return_data["data"]["error"] = "No such user."
+        return_data["data"]["isValid"] = False
         return jsonify(return_data)
     
     if password:
         if not check_password_hash(user["password"], password):
-            return_data["error"] = "Invalid user credentials.";
-            return_data["isValid"] = False
+            return_data["data"]["error"] = "Invalid user credentials.";
+            return_data["data"]["isValid"] = False
+            
             return jsonify(return_data)
 
         return_data["data"] = {"username": user["username"], "api_key": user["api_key"], "isValid":True}
@@ -121,8 +123,8 @@ def getUser():
         return_data["data"] = {"username": user["username"], "api_key": user["api_key"], "isValid":True}
         return jsonify(return_data)
     elif not password:
-        return_data["error"] = "Invalid user credentials."
-        return_data["isValid"] = False
+        return_data["data"]["error"] = "Invalid user credentials."
+        return_data["data"]["isValid"] = False
         return jsonify(return_data)
 
  
