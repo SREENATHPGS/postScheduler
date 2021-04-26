@@ -91,6 +91,7 @@
                         function(response) {
                             let resp = JSON.parse(response);
                             console.log(resp);
+                            updateTable(response);
                         }
                     );
                 },
