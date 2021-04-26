@@ -23,8 +23,8 @@
                 "post_status",
                 "user_id"
             ];
-		    let schedule_entry = JSON.parse(response)["data"];
-		    console.log(schedule_entry);
+		    let schedules = JSON.parse(response)["data"];
+		    console.log(schedule);
 
 		    let schedules_table = document.getElementById("mytable");
 		    let Thead = schedules_table.createTHead();
