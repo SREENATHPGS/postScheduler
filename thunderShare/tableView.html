@@ -7,9 +7,66 @@
     <title>Document</title>
 </head>
 <body>
+    <table id= "mytable"></table>
     <script src="./assets/js/api_calls.js"></script>
     <script src="./assets/js/cookie_management.js"></script>
     <script>
+        function updateTable (response) {
+            let tableHeaders = [
+                "created",
+                "updated",
+                "data",
+                "id",
+                "media_link",
+                "media_story",
+                "post_details",
+                "post_status",
+                "user_id"
+            ];
+		    let products = JSON.parse(response)["data"];
+		    console.log(products);
+
+		    products_table = document.getElementById("mytable");
+		    let Thead = products_table.createTHead();
+		    let Tbody = products_table.createTBody();
+		    let headerRow = Thead.insertRow(0);
+
+		    for (header in tableHeaders) {
+		    	let headerCell = headerRow.insertCell(header);
+		    	headerCell.innerHTML = tableHeaders[header];
+		    }
+
+		    for (product in products) {
+		    	let bodyRow = Tbody.insertRow(product);
+		    	for (header in tableHeaders) {
+		    		let bodyCell = bodyRow.insertCell(header);
+		    		if(header == 0) {
+		    			bodyCell.innerHTML = parseInt(product)+1;
+		    		} else if (tableHeaders[header] == "actions") {
+		    			let buttonBox = document.createElement('div');
+		    			buttonBox.className = "button_box";
+		    			let deleteButton  = document.createElement('button');
+		    			deleteButton.innerHTML = "DELETE";
+		    			deleteButton.className = "product_delete_button";
+		    			deleteButton.addEventListener("click", function () {
+		    				
+		    			});
+                    
+		    			let editButton = document.createElement('button');
+		    			editButton.innerHTML = "EDIT";
+		    			editButton.className = "product_edit_button";
+		    			editButton.addEventListener("click", function () {
+		    				
+		    			});
+
+		    			buttonBox.appendChild(deleteButton);
+		    			buttonBox.appendChild(editButton);
+		    			bodyCell.appendChild(buttonBox);
+		    		}
+		    	}
+		    }
+	    }
+
         (function () {
             var apiCall = new ApiCalls("/");
             let username = getCookie("username");
