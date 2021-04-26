@@ -23,6 +23,19 @@
             setInterval(
                 function() {
                     console.log("Calling api to get schedules.");
+                    apiCall.getData(
+                        "scheduler/schedule_post", 
+                        {
+                            "Content-Type":"application/json",
+                            "SCHEDULER-USERNAME": username,
+                            "SCHEDULER-API-KEY": api_key
+                        },
+                        [],
+                        function(response) {
+                            let resp = JSON.parse(response);
+                            console.log(resp);
+                        }
+                    );
                 },
                 2000
             )
