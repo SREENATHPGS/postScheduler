@@ -116,6 +116,7 @@
             </div>
             <div class="row">
                 <input class="loginInput" type="button" onClick=logout() id="app_logout_button" value="Logout">
+                <input class="loginInput" type="button" onClick=viewSchedules() id="view_schedules_button" value="Logout">
             </div>
           </form>
         </div>
@@ -134,6 +135,10 @@
         var schedulerForm = undefined;
         var apiCall = new ApiCalls("/");
         var requiredPermissions = ['public_profile', 'instagram_basic', 'pages_show_list', 'instagram_content_publish'];
+
+        function viewSchedules() {
+            window.open("https://shiftbytes.co.in/schedules/");
+        }
 
         window.fbAsyncInit = function() {
             FB.init({
@@ -187,15 +192,15 @@
         function getFbAccountInfo() {
             displayLoginMessage('Fetching FB account information.... ');
             FB.api('/me', function(response) {
-                console.log(response);
+                // console.log(response);
                 displayLoginMessage('Logged in on FB as ' + response.name);
                 FB.api('/me/accounts', function(response) {
-                    console.log(response);
+                    // console.log(response);
                     let fbPages = response.data;
                     fbPages.forEach(page => {
                         let fbPageId = page.id;
                         FB.api('/'+page.id+"?fields=instagram_business_account&access_token="+FB.getAccessToken(), function(response){
-                            console.log(response);
+                            // console.log(response);
                             if (response.hasOwnProperty("instagram_business_account")) {
                                 appendFbPage(page);
                                 appendIgPage(response.instagram_business_account.id);
@@ -208,7 +213,7 @@
             FB.api("/"+FB.getUserID()+"/permissions?access_token="+FB.getAccessToken(), function(response) {
                 let permissionData = response.data;
                 let not_granted_list = [];
-                console.log(response);
+                // console.log(response);
 
                 permissionData.forEach(permission => {
                     if (permission.status == "declined") {
