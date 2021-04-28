@@ -6,6 +6,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Document</title>
 
+    <link rel="stylesheet" href="./assets/css/form_style.css">
     <style>
         #schedules_table {
           font-family: Arial, Helvetica, sans-serif;
@@ -33,10 +34,18 @@
 
 </head>
 <body>
+    <div class="row">
+        <input class="loginInput" type="button" onClick=createSchedule() value="New Schedule">
+    </div> 
     <table id= "schedules_table"></table>
     <script src="./assets/js/api_calls.js"></script>
     <script src="./assets/js/cookie_management.js"></script>
     <script>
+
+        function createSchedule() {
+            window.location.href = "https://shiftbytes.co.in/fbauth/";
+        }
+
         function updateTable (response) {
             let tableHeaders = [
                 "created",
